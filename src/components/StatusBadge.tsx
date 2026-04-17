@@ -1,4 +1,4 @@
-import { statusLabel } from '@/lib/utils'
+import { statusLabel } from '../lib/utils'
 
 interface Props {
   pago: boolean
