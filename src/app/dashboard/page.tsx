@@ -9,6 +9,12 @@ import {
 import StatusBadge from '@/components/StatusBadge'
 import AIInput from '@/components/AIInput'
 import ReciboModal from '@/components/ReciboModal'
+import TabResumo from '@/components/TabResumo'
+import TabReceitas from '@/components/TabReceitas'
+import TabEmpresa from '@/components/TabEmpresa'
+import TabPessoal from '@/components/TabPessoal'
+import TabRecibos from '@/components/TabRecibos'
+import TabConfig from '@/components/TabConfig'
 import type {
   Receita, DespesaEmpresa, DespesaPessoal, Pendencia,
   Recibo, Configuracoes, TabName, AIParseResult
