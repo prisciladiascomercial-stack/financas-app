@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { Check, X, Pencil, Trash2 } from 'lucide-react'
 import StatusBadge from './StatusBadge'
-import { fmt, fmtDateShort } from '@/lib/utils'
+import { fmt, fmtDateShort } from '../lib/utils'
 
 interface Col {
   key: string
