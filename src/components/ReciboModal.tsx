@@ -1,10 +1,10 @@
 'use client'
 import { useState } from 'react'
 import { X } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
-import { gerarPDFRecibo, } from '@/lib/export'
-import { gerarNumeroRecibo, todayISO } from '@/lib/utils'
-import type { Recibo, Configuracoes } from '@/types'
+import { supabase } from '../lib/supabase'
+import { gerarPDFRecibo, } from '../lib/export'
+import { gerarNumeroRecibo, todayISO } from '../lib/utils'
+import type { Recibo, Configuracoes } from '../types'
 
 interface Props {
   config: Configuracoes
