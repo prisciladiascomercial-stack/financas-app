@@ -1,18 +1,18 @@
 'use client'
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { supabase } from '@/lib/supabase'
-import { fmt, fmtDate, MESES, CATS_EMP, CATS_REC_EMP, CATS_PES, CATS_REC_PES, todayISO } from '@/lib/utils'
+import { supabase } from '../lib/supabase'
+import { fmt, fmtDate, MESES, CATS_EMP, CATS_REC_EMP, CATS_PES, CATS_REC_PES, todayISO } from '../lib/utils'
 import {
   exportarCSVGeral, exportarCSVEmpresa, exportarCSVPessoal, exportarCSVReceitas,
   exportarPDFGeral, exportarPDFPorCategoria
-} from '@/lib/export'
-import StatusBadge from '@/components/StatusBadge'
-import AIInput from '@/components/AIInput'
-import ReciboModal from '@/components/ReciboModal'
+} from '../lib/export'
+import StatusBadge from '../components/StatusBadge'
+import AIInput from '../components/AIInput'
+import ReciboModal from '../components/ReciboModal'
 import type {
   Receita, DespesaEmpresa, DespesaPessoal, Pendencia,
   Recibo, Configuracoes, TabName, AIParseResult
-} from '@/types'
+} from '../types'
 import {
   LayoutDashboard, TrendingUp, Building2, User, FileText,
   Settings, Plus, Download, FileSpreadsheet, Wand2, Receipt,
