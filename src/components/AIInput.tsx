@@ -1,7 +1,7 @@
 'use client'
 import { useState, useRef } from 'react'
 import { Mic, Camera, Type, Loader2, Check, X } from 'lucide-react'
-import type { AIParseResult } from '@/types'
+import type { AIParseResult } from '../types'
 
 interface Props {
   categorias: string[]
