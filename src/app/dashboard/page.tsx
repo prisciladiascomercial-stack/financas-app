@@ -51,6 +51,28 @@ export default function Dashboard() {
   const [lastSync, setLastSync] = useState<Date>(new Date())
   const logoInputRef = useRef<HTMLInputElement>(null)
 
+  function normalizePayload<T extends Record<string, any>>(data: T): T {
+    const normalized = Object.fromEntries(
+      Object.entries(data).map(([key, value]) => {
+        if (value === '') return [key, null]
+        return [key, value]
+      })
+    )
+    return normalized as T
+  }
+
+  async function runDbAction(action: () => Promise<any>, successMessage?: string) {
+    const result = await action()
+    const error = result && 'error' in result ? result.error : null
+    if (error) {
+      alert(`Nao foi possivel salvar: ${error.message}`)
+      console.error(error)
+      return false
+    }
+    if (successMessage) console.log(successMessage)
+    return true
+  }
+
   const load = useCallback(async () => {
     const [r, e, p, pend, rec, cfg] = await Promise.all([
       supabase.from('receitas').select('*').eq('mes', mes).eq('ano', ano).order('data'),
@@ -98,26 +120,38 @@ export default function Dashboard() {
 
   // ── CRUD Receitas ──────────────────────────────────────────────────────────
   async function addReceita(data: Partial<Receita>) {
-    await supabase.from('receitas').insert({ ...data, mes, ano })
-    load()
+    const ok = await runDbAction(() =>
+      Promise.resolve(supabase.from('receitas').insert(normalizePayload({ ...data, mes, ano })))
+    )
+    if (ok) load()
   }
   async function updateReceita(id: string, data: Partial<Receita>) {
-    await supabase.from('receitas').update({ ...data, updated_at: new Date().toISOString() }).eq('id', id)
-    load()
+    const ok = await runDbAction(() =>
+      Promise.resolve(supabase.from('receitas').update(normalizePayload({ ...data, updated_at: new Date().toISOString() })).eq('id', id))
+    )
+    if (ok) load()
   }
   async function deleteReceita(id: string) {
-    await supabase.from('receitas').delete().eq('id', id); load()
+    const ok = await runDbAction(() => Promise.resolve(supabase.from('receitas').delete().eq('id', id)))
+    if (ok) load()
   }
 
   // ── CRUD Empresa ───────────────────────────────────────────────────────────
   async function addEmpresa(data: Partial<DespesaEmpresa>) {
-    await supabase.from('despesas_empresa').insert({ ...data, mes, ano }); load()
+    const ok = await runDbAction(() =>
+      Promise.resolve(supabase.from('despesas_empresa').insert(normalizePayload({ ...data, mes, ano })))
+    )
+    if (ok) load()
   }
   async function updateEmpresa(id: string, data: Partial<DespesaEmpresa>) {
-    await supabase.from('despesas_empresa').update({ ...data, updated_at: new Date().toISOString() }).eq('id', id); load()
+    const ok = await runDbAction(() =>
+      Promise.resolve(supabase.from('despesas_empresa').update(normalizePayload({ ...data, updated_at: new Date().toISOString() })).eq('id', id))
+    )
+    if (ok) load()
   }
   async function deleteEmpresa(id: string) {
-    await supabase.from('despesas_empresa').delete().eq('id', id); load()
+    const ok = await runDbAction(() => Promise.resolve(supabase.from('despesas_empresa').delete().eq('id', id)))
+    if (ok) load()
   }
   async function baixarEmpresa(id: string, jaEhPago: boolean) {
     if (jaEhPago) {
@@ -129,13 +163,20 @@ export default function Dashboard() {
 
   // ── CRUD Pessoal ───────────────────────────────────────────────────────────
   async function addPessoal(data: Partial<DespesaPessoal>) {
-    await supabase.from('despesas_pessoal').insert({ ...data, mes, ano }); load()
+    const ok = await runDbAction(() =>
+      Promise.resolve(supabase.from('despesas_pessoal').insert(normalizePayload({ ...data, mes, ano })))
+    )
+    if (ok) load()
   }
   async function updatePessoal(id: string, data: Partial<DespesaPessoal>) {
-    await supabase.from('despesas_pessoal').update({ ...data, updated_at: new Date().toISOString() }).eq('id', id); load()
+    const ok = await runDbAction(() =>
+      Promise.resolve(supabase.from('despesas_pessoal').update(normalizePayload({ ...data, updated_at: new Date().toISOString() })).eq('id', id))
+    )
+    if (ok) load()
   }
   async function deletePessoal(id: string) {
-    await supabase.from('despesas_pessoal').delete().eq('id', id); load()
+    const ok = await runDbAction(() => Promise.resolve(supabase.from('despesas_pessoal').delete().eq('id', id)))
+    if (ok) load()
   }
   async function baixarPessoal(id: string, jaEhPago: boolean) {
     if (jaEhPago) {
@@ -147,13 +188,20 @@ export default function Dashboard() {
 
   // ── CRUD Pendências ────────────────────────────────────────────────────────
   async function addPendencia(data: Partial<Pendencia>) {
-    await supabase.from('pendencias').insert({ ...data, mes, ano }); load()
+    const ok = await runDbAction(() =>
+      Promise.resolve(supabase.from('pendencias').insert(normalizePayload({ ...data, mes, ano })))
+    )
+    if (ok) load()
   }
   async function updatePendencia(id: string, data: Partial<Pendencia>) {
-    await supabase.from('pendencias').update({ ...data, updated_at: new Date().toISOString() }).eq('id', id); load()
+    const ok = await runDbAction(() =>
+      Promise.resolve(supabase.from('pendencias').update(normalizePayload({ ...data, updated_at: new Date().toISOString() })).eq('id', id))
+    )
+    if (ok) load()
   }
   async function deletePendencia(id: string) {
-    await supabase.from('pendencias').delete().eq('id', id); load()
+    const ok = await runDbAction(() => Promise.resolve(supabase.from('pendencias').delete().eq('id', id)))
+    if (ok) load()
   }
 
   // ── Transportar pendentes ──────────────────────────────────────────────────
@@ -170,9 +218,13 @@ export default function Dashboard() {
       ...pendPend.map(x => ({ vencimento: x.vencimento, descricao: x.descricao, valor: x.valor, pago: false, origem: x.origem, transportado: true, mes: proximo, ano: proxAno })),
     ]
     if (inserts.length === 0) { alert('Não há itens pendentes para transportar.'); return }
-    await supabase.from('pendencias').upsert(inserts)
-    alert(`${inserts.length} item(ns) transportado(s) para ${MESES[proximo]}/${proxAno}!`)
-    load()
+    const ok = await runDbAction(() =>
+      Promise.resolve(supabase.from('pendencias').upsert(inserts.map(normalizePayload)))
+    )
+    if (ok) {
+      alert(`${inserts.length} item(ns) transportado(s) para ${MESES[proximo]}/${proxAno}!`)
+      load()
+    }
   }
 
   // ── Upload logo ────────────────────────────────────────────────────────────
@@ -183,7 +235,9 @@ export default function Dashboard() {
     reader.onload = async ev => {
       const url = ev.target?.result as string
       setLogoDataUrl(url)
-      await supabase.from('configuracoes').update({ logo_url: url, updated_at: new Date().toISOString() }).eq('id', 1)
+      await runDbAction(() =>
+        Promise.resolve(supabase.from('configuracoes').update({ logo_url: url, updated_at: new Date().toISOString() }).eq('id', 1))
+      )
     }
     reader.readAsDataURL(file)
   }
