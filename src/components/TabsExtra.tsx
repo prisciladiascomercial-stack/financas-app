@@ -1,10 +1,10 @@
 'use client'
 import { useState } from 'react'
-import { fmt, fmtDateShort, todayISO, MESES, CATS_PES, diasAteVencer } from '@/lib/utils'
-import { exportarCSVPessoal, exportarPDFPorCategoria, gerarPDFRecibo } from '@/lib/export'
-import StatusBadge from '@/components/StatusBadge'
-import type { DespesaPessoal, Pendencia, Recibo, Configuracoes } from '@/types'
-import { supabase } from '@/lib/supabase'
+import { fmt, fmtDateShort, todayISO, MESES, CATS_PES, diasAteVencer } from '../lib/utils'
+import { exportarCSVPessoal, exportarPDFPorCategoria, gerarPDFRecibo } from '../lib/export'
+import StatusBadge from '../components/StatusBadge'
+import type { DespesaPessoal, Pendencia, Recibo, Configuracoes } from '../types'
+import { supabase } from '../lib/supabase'
 import { Plus, Wand2, Download, FileSpreadsheet, Receipt } from 'lucide-react'
 
 function FormRow({ fields, onSave, onCancel }: any) {
